@@ -1,0 +1,6 @@
+[submodule "libs"]
+	path = libs
+	url = https://github.com/rock88/moonlight_libretro-prebuilts.git
+[submodule "moonlight"]
+	path = moonlight
+	url = https://github.com/rock88/moonlight-nx.git
