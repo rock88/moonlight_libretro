@@ -1,0 +1,11 @@
+PLATFORM = win
+PLATFORM_LIB = win
+PLATFORM_EXT = dll
+
+SHARED = -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=link.T -Wl,--no-undefined
+
+include Makefile.common
+
+CFLAGS += -DCREATE_EVENT_MANUAL_RESET=1 -Wno-expansion-to-defined -D_WIN32
+INCLUDES += -I/usr/share/mingw-w64/include
+LIBS += -lopengl32

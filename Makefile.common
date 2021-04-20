@@ -1,0 +1,182 @@
+# Base
+
+PLATFORM ?= unknown
+PLATFORM_LIB ?= unknown
+PLATFORM_EXT ?= unknown
+
+TARGET_NAME = moonlight
+TARGET_VERSION = 1.2.0
+
+INCLUDES = \
+	-Isrc \
+	-Isrc/glsym \
+	-Isrc/controls \
+	-Isrc/streaming \
+	-Imoonlight/src \
+	-Imoonlight/src/controls \
+	-Imoonlight/src/controls/dummy \
+	-Imoonlight/src/crypto \
+	-Imoonlight/src/libgamestream \
+	-Imoonlight/src/nanogui_resources \
+	-Imoonlight/src/streaming \
+	-Imoonlight/src/streaming/audio \
+	-Imoonlight/src/streaming/ffmpeg \
+	-Imoonlight/src/streaming/video \
+	-Imoonlight/src/ui \
+	-Imoonlight/src/ui/buttons \
+	-Imoonlight/src/ui/windows \
+	-Imoonlight/src/utils \
+	-Imoonlight/third_party/moonlight-common-c/enet/include \
+	-Imoonlight/third_party/moonlight-common-c/reedsolomon \
+	-Imoonlight/third_party/moonlight-common-c/src \
+	-Imoonlight/third_party/nanogui/include \
+	-Imoonlight/third_party/nanogui/ext/nanovg/src \
+	-Ilibs/$(PLATFORM_LIB)/curl/include \
+	-Ilibs/$(PLATFORM_LIB)/expat/include \
+	-Ilibs/$(PLATFORM_LIB)/ffmpeg/include \
+	-Ilibs/$(PLATFORM_LIB)/openssl/include \
+	-Ilibs/$(PLATFORM_LIB)/opus/include \
+	-Ilibs/$(PLATFORM_LIB)/jansson/include
+
+C_SOURCES = \
+	src/glsym/rglgen.c \
+	src/glsym/glsym_gl.c \
+	moonlight/third_party/moonlight-common-c/enet/callbacks.c \
+	moonlight/third_party/moonlight-common-c/enet/compress.c \
+	moonlight/third_party/moonlight-common-c/enet/host.c \
+	moonlight/third_party/moonlight-common-c/enet/list.c \
+	moonlight/third_party/moonlight-common-c/enet/packet.c \
+	moonlight/third_party/moonlight-common-c/enet/peer.c \
+	moonlight/third_party/moonlight-common-c/enet/protocol.c \
+	moonlight/third_party/moonlight-common-c/enet/unix.c \
+	moonlight/third_party/moonlight-common-c/reedsolomon/rs.c \
+	moonlight/third_party/moonlight-common-c/src/AudioStream.c \
+	moonlight/third_party/moonlight-common-c/src/ByteBuffer.c \
+	moonlight/third_party/moonlight-common-c/src/Connection.c \
+	moonlight/third_party/moonlight-common-c/src/ControlStream.c \
+	moonlight/third_party/moonlight-common-c/src/FakeCallbacks.c \
+	moonlight/third_party/moonlight-common-c/src/InputStream.c \
+	moonlight/third_party/moonlight-common-c/src/LinkedBlockingQueue.c \
+	moonlight/third_party/moonlight-common-c/src/Misc.c \
+	moonlight/third_party/moonlight-common-c/src/Platform.c \
+	moonlight/third_party/moonlight-common-c/src/PlatformSockets.c \
+	moonlight/third_party/moonlight-common-c/src/RtpFecQueue.c \
+	moonlight/third_party/moonlight-common-c/src/RtpReorderQueue.c \
+	moonlight/third_party/moonlight-common-c/src/RtspConnection.c \
+	moonlight/third_party/moonlight-common-c/src/RtspParser.c \
+	moonlight/third_party/moonlight-common-c/src/SdpGenerator.c \
+	moonlight/third_party/moonlight-common-c/src/SimpleStun.c \
+	moonlight/third_party/moonlight-common-c/src/VideoDepacketizer.c \
+	moonlight/third_party/moonlight-common-c/src/VideoStream.c \
+	moonlight/third_party/nanogui/ext/nanovg/src/nanovg.c
+
+CXX_SOURCES = \
+	src/libretro.cpp \
+	src/controls/LibretroMouseFrontend.cpp \
+	src/streaming/LibretroMoonlightSessionDecoderAndRenderProvider.cpp \
+	moonlight/src/BoxArtManager.cpp \
+	moonlight/src/Logger.cpp \
+	moonlight/src/Settings.cpp \
+	moonlight/src/controls/GamepadController.cpp \
+	moonlight/src/controls/GamepadMapper.cpp \
+	moonlight/src/controls/KeyboardController.cpp \
+	moonlight/src/controls/MouseController.cpp \
+	moonlight/src/controls/StreamControlsController.cpp \
+	moonlight/src/crypto/Data.cpp \
+	moonlight/src/crypto/OpenSSLCryptoManager.cpp \
+	moonlight/src/libgamestream/client.cpp \
+	moonlight/src/libgamestream/http.cpp \
+	moonlight/src/libgamestream/xml.cpp \
+	moonlight/src/nanogui_resources/nanogui_resources.cpp \
+	moonlight/src/streaming/GameStreamClient.cpp \
+	moonlight/src/streaming/MoonlightSession.cpp \
+	moonlight/src/streaming/WakeOnLanManager.cpp \
+	moonlight/src/streaming/audio/DebugFileRecorderAudioRenderer.cpp \
+	moonlight/src/streaming/ffmpeg/FFmpegVideoDecoder.cpp \
+	moonlight/src/streaming/video/GLVideoRenderer.cpp \
+	moonlight/src/ui/Alert.cpp \
+	moonlight/src/ui/Application.cpp \
+	moonlight/src/ui/LoadingOverlay.cpp \
+	moonlight/src/ui/buttons/AddHostButton.cpp \
+	moonlight/src/ui/buttons/AppButton.cpp \
+	moonlight/src/ui/buttons/HostButton.cpp \
+	moonlight/src/ui/windows/AddHostWindow.cpp \
+	moonlight/src/ui/windows/AppListWindow.cpp \
+	moonlight/src/ui/windows/ContentWindow.cpp \
+	moonlight/src/ui/windows/InputSettingsWindow.cpp \
+	moonlight/src/ui/windows/LogsWindow.cpp \
+	moonlight/src/ui/windows/MainWindow.cpp \
+	moonlight/src/ui/windows/SettingsWindow.cpp \
+	moonlight/src/ui/windows/StreamWindow.cpp \
+	moonlight/third_party/nanogui/src/widget.cpp \
+	moonlight/third_party/nanogui/src/button.cpp \
+	moonlight/third_party/nanogui/src/common.cpp \
+	moonlight/third_party/nanogui/src/screen.cpp \
+	moonlight/third_party/nanogui/src/checkbox.cpp \
+	moonlight/third_party/nanogui/src/vscrollpanel.cpp \
+	moonlight/third_party/nanogui/src/colorpicker.cpp \
+	moonlight/third_party/nanogui/src/textarea.cpp \
+	moonlight/third_party/nanogui/src/shader_gl.cpp \
+	moonlight/third_party/nanogui/src/canvas.cpp \
+	moonlight/third_party/nanogui/src/window.cpp \
+	moonlight/third_party/nanogui/src/graph.cpp \
+	moonlight/third_party/nanogui/src/popup.cpp \
+	moonlight/third_party/nanogui/src/layout.cpp \
+	moonlight/third_party/nanogui/src/texture.cpp \
+	moonlight/third_party/nanogui/src/texture_gl.cpp \
+	moonlight/third_party/nanogui/src/tabwidget.cpp \
+	moonlight/third_party/nanogui/src/shader.cpp \
+	moonlight/third_party/nanogui/src/imageview.cpp \
+	moonlight/third_party/nanogui/src/progressbar.cpp \
+	moonlight/third_party/nanogui/src/combobox.cpp \
+	moonlight/third_party/nanogui/src/theme.cpp \
+	moonlight/third_party/nanogui/src/traits.cpp \
+	moonlight/third_party/nanogui/src/label.cpp \
+	moonlight/third_party/nanogui/src/opengl.cpp \
+	moonlight/third_party/nanogui/src/renderpass_gl.cpp \
+	moonlight/third_party/nanogui/src/imagepanel.cpp \
+	moonlight/third_party/nanogui/src/colorwheel.cpp \
+	moonlight/third_party/nanogui/src/messagedialog.cpp \
+	moonlight/third_party/nanogui/src/textbox.cpp \
+	moonlight/third_party/nanogui/src/slider.cpp \
+	moonlight/third_party/nanogui/src/popupbutton.cpp
+
+LIBS = \
+		-Llibs/$(PLATFORM_LIB)/curl/lib \
+		-Llibs/$(PLATFORM_LIB)/expat/lib \
+		-Llibs/$(PLATFORM_LIB)/ffmpeg/lib \
+		-Llibs/$(PLATFORM_LIB)/openssl/lib \
+		-Llibs/$(PLATFORM_LIB)/opus/lib \
+		-Llibs/$(PLATFORM_LIB)/jansson/lib
+
+LIBS += -lcrypto -lssl -lcurl -lexpat -lopus -lavcodec -lavutil -ljansson -lstdc++
+
+OBJECTS := $(addprefix build_$(PLATFORM)/, $(C_SOURCES:.c=.o) $(CXX_SOURCES:.cpp=.o))
+
+DEFINES += -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
+		-DHAS_SOCKLEN_T \
+		-D__LIBRETRO__ \
+		-DMOONLIGHT_VERSION=\"$(TARGET_VERSION)\" -DUSE_OPENSSL_CRYPTO
+
+		#-DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE 
+
+CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
+CXXFLAGS += -std=gnu++17 -fno-permissive $(DEFINES)
+
+TARGET := $(TARGET_NAME)_libretro.$(PLATFORM_EXT)
+
+all: build_$(PLATFORM)/$(TARGET)
+
+build_$(PLATFORM)/$(TARGET): $(OBJECTS)
+	$(CC) $(SHARED) $(INCLUDES) -o $@ $(OBJECTS) $(LIBS) -lm $(EXTRA_GL_LIBS)
+
+build_$(PLATFORM)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+
+build_$(PLATFORM)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c -o $@ $<
+
+clean:
+	rm -f build_$(PLATFORM)/$(TARGET) $(OBJECTS)
