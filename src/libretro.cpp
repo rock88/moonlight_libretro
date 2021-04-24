@@ -30,13 +30,14 @@
 #define RARCH_GL_COLOR_ATTACHMENT0 GL_COLOR_ATTACHMENT0
 #endif
 
-#define BASE_WIDTH 1280
-#define BASE_HEIGHT 720
-#define MAX_WIDTH 3840
-#define MAX_HEIGHT 2160
+#if OSX
+extern "C" unsigned int macos_get_backing_scale_factor();
+#endif
 
-static int width  = BASE_WIDTH;
-static int height = BASE_HEIGHT;
+unsigned int width  = 1280;
+unsigned int height = 720;
+unsigned int framebuffer_width = width;
+unsigned int framebuffer_height = height;
 
 retro_hw_render_callback hw_render;
 retro_video_refresh_t video_cb;
@@ -46,18 +47,17 @@ retro_environment_t environment_cb;
 retro_input_poll_t input_poll_cb;
 retro_input_state_t input_state_cb;
 
-static Application* app;
-static bool moonlight_is_initialized = false;
+static Application* app = NULL;
 int moonlight_exit = 0;
 
-void moonlight_init(int width, int height) {
-    if (moonlight_is_initialized) {
-        return;
-    }
+void retro_init(void) {
+    OpenSSL_add_all_algorithms();
+    //curl_global_init(CURL_GLOBAL_ALL);
     
-    Logger::info("moonlight", "init1");
-    
-    moonlight_is_initialized = true;
+#if OSX
+    framebuffer_width = width * macos_get_backing_scale_factor();
+    framebuffer_height = height * macos_get_backing_scale_factor();
+#endif
     
     GameStreamClient::instance().start();
     
@@ -65,43 +65,69 @@ void moonlight_init(int width, int height) {
     MouseController::instance().init(new LibretroMouseFrontend());
     KeyboardController::instance().init(new DummyKeyboardFrontend());
     GamepadController::instance().init(new DummyGamepadFrontend());
-    
-    nanogui::init();
-    app = new Application(Size(width, height), Size(width, height));
-    
-    nanogui::setup(1.0 / 15.0);
-    
-    Logger::info("moonlight", "init2");
-}
-
-void moonlight_deinit() {
-    if (!moonlight_is_initialized) {
-        return;
-    }
-    
-    Logger::info("moonlight", "deinit1");
-    
-    moonlight_is_initialized = false;
-    
-    if (app) {
-        //delete app;
-        app = nullptr;
-    }
-    
-    GameStreamClient::instance().stop();
-    //nanogui::leave();
-    //nanogui::shutdown();
-    
-    Logger::info("moonlight", "deinit2");
-}
-
-void retro_init(void) {
-    OpenSSL_add_all_algorithms();
-    curl_global_init(CURL_GLOBAL_ALL);
 }
 
 void retro_deinit(void) {
+    GameStreamClient::instance().stop();
+    Logger::info("moonlight", "retro_deinit");
+}
+
+static void context_reset(void) {
+    fprintf(stderr, "Context reset!\n");
+    rglgen_resolve_symbols(hw_render.get_proc_address);
     
+    nanogui::init();
+    nanogui::setup(1.0 / 15.0);
+    
+    if (app) {
+        delete app;
+    }
+    
+    app = new Application({ (float)width, (float)height }, { (float)framebuffer_width, (float)framebuffer_height });
+}
+
+static void context_destroy(void) {
+    fprintf(stderr, "Context destroy!\n");
+    
+    //delete app;
+    nanogui::leave();
+}
+
+void retro_run(void) {
+    input_poll_cb();
+    
+    MouseController::instance().handle_mouse();
+    KeyboardController::instance().handle_keyboard();
+    GamepadController::instance().handle_gamepad();
+    
+    glBindFramebuffer(RARCH_GL_FRAMEBUFFER, hw_render.get_current_framebuffer());
+    
+    glViewport(0, 0, framebuffer_width, framebuffer_height);
+    
+    nanogui::draw();
+    MouseController::instance().draw_cursor(app);
+    
+    video_cb(RETRO_HW_FRAME_BUFFER_VALID, framebuffer_width, framebuffer_height, 0);
+}
+
+static bool retro_init_hw_context(void) {
+#if defined(GL_CORE)
+    hw_render.context_type = RETRO_HW_CONTEXT_OPENGL_CORE;
+    hw_render.version_major = 3;
+    hw_render.version_minor = 2;
+#else
+    hw_render.context_type = RETRO_HW_CONTEXT_OPENGL;
+#endif
+    hw_render.context_reset = context_reset;
+    hw_render.context_destroy = context_destroy;
+    hw_render.depth = true;
+    hw_render.stencil = true;
+    hw_render.bottom_left_origin = true;
+    
+    if (!environment_cb(RETRO_ENVIRONMENT_SET_HW_RENDER, &hw_render)) {
+        return false;
+    }
+    return true;
 }
 
 unsigned retro_api_version(void) {
@@ -128,10 +154,10 @@ void retro_get_system_av_info(struct retro_system_av_info *info) {
     };
     
     info->geometry = (struct retro_game_geometry) {
-        .base_width   = BASE_WIDTH,
-        .base_height  = BASE_HEIGHT,
-        .max_width    = MAX_WIDTH,
-        .max_height   = MAX_HEIGHT,
+        .base_width   = width,
+        .base_height  = height,
+        .max_width    = framebuffer_width,
+        .max_height   = framebuffer_height,
         .aspect_ratio = 16.0 / 9.0,
     };
 }
@@ -169,53 +195,6 @@ void retro_set_input_state(retro_input_state_t cb) {
 
 void retro_set_video_refresh(retro_video_refresh_t cb) {
     video_cb = cb;
-}
-
-void retro_run(void) {
-    moonlight_init(width, height);
-    
-    input_poll_cb();
-    
-    MouseController::instance().handle_mouse();
-    KeyboardController::instance().handle_keyboard();
-    GamepadController::instance().handle_gamepad();
-    
-    glBindFramebuffer(RARCH_GL_FRAMEBUFFER, hw_render.get_current_framebuffer());
-    
-    glViewport(0, 0, width, height);
-    
-    if (app) {
-    nanogui::draw();
-    MouseController::instance().draw_cursor(app);
-    }
-    
-    video_cb(RETRO_HW_FRAME_BUFFER_VALID, width, height, 0);
-}
-
-static void context_reset(void) {
-    fprintf(stderr, "Context reset!\n");
-    rglgen_resolve_symbols(hw_render.get_proc_address);
-}
-
-static void context_destroy(void) {
-    fprintf(stderr, "Context destroy!\n");
-    moonlight_deinit();
-}
-
-static bool retro_init_hw_context(void) {
-    hw_render.context_type = RETRO_HW_CONTEXT_OPENGL_CORE;
-    hw_render.version_major = 3;
-    hw_render.version_minor = 2;
-    hw_render.context_reset = context_reset;
-    hw_render.context_destroy = context_destroy;
-    hw_render.depth = true;
-    hw_render.stencil = true;
-    hw_render.bottom_left_origin = true;
-    
-    if (!environment_cb(RETRO_ENVIRONMENT_SET_HW_RENDER, &hw_render)) {
-        return false;
-    }
-    return true;
 }
 
 bool retro_load_game(const struct retro_game_info *info) {

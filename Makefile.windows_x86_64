@@ -1,0 +1,12 @@
+PLATFORM = windows_x86_64
+PLATFORM_LIB = windows/x86_64
+PLATFORM_EXT = dll
+
+SHARED = -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=link.T -Wl,--no-undefined
+
+INCLUDES += -Isrc/helpers/windows/includes
+C_SOURCES += src/helpers/windows/helper_windows.c
+
+include Makefile.common
+
+LIBS += -lbcrypt -lopengl32 -lws2_32 -lcrypt32 -lgdi32 -luser32 -lcomdlg32 -lwinmm -lqwave -lkernel32

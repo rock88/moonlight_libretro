@@ -1,0 +1,18 @@
+PLATFORM = macos_x86_64
+PLATFORM_LIB = macos/x86_64
+PLATFORM_EXT = dylib
+
+SHARED = -dynamiclib
+
+M_SOURCES += src/helpers/macos/helper_macos.m
+
+include Makefile.common
+
+FLAGS = -DOSX -DGL_CORE -mmacosx-version-min=10.12
+CFLAGS += $(FLAGS)
+CXXFLAGS += $(FLAGS)
+
+LIBS += \
+    -framework OpenGL -framework VideoToolbox -framework CoreVideo \
+    -framework CoreMedia -framework Foundation -framework AudioToolbox \
+    -framework AppKit

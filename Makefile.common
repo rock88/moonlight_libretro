@@ -7,7 +7,7 @@ PLATFORM_EXT ?= unknown
 TARGET_NAME = moonlight
 TARGET_VERSION = 1.2.0
 
-INCLUDES = \
+INCLUDES += \
 	-Isrc \
 	-Isrc/glsym \
 	-Isrc/controls \
@@ -38,9 +38,10 @@ INCLUDES = \
 	-Ilibs/$(PLATFORM_LIB)/opus/include \
 	-Ilibs/$(PLATFORM_LIB)/jansson/include
 
-C_SOURCES = \
+C_SOURCES += \
 	src/glsym/rglgen.c \
 	src/glsym/glsym_gl.c \
+	moonlight/third_party/nanogui/ext/nanovg/src/nanovg.c \
 	moonlight/third_party/moonlight-common-c/enet/callbacks.c \
 	moonlight/third_party/moonlight-common-c/enet/compress.c \
 	moonlight/third_party/moonlight-common-c/enet/host.c \
@@ -49,6 +50,7 @@ C_SOURCES = \
 	moonlight/third_party/moonlight-common-c/enet/peer.c \
 	moonlight/third_party/moonlight-common-c/enet/protocol.c \
 	moonlight/third_party/moonlight-common-c/enet/unix.c \
+	moonlight/third_party/moonlight-common-c/enet/win32.c \
 	moonlight/third_party/moonlight-common-c/reedsolomon/rs.c \
 	moonlight/third_party/moonlight-common-c/src/AudioStream.c \
 	moonlight/third_party/moonlight-common-c/src/ByteBuffer.c \
@@ -67,10 +69,9 @@ C_SOURCES = \
 	moonlight/third_party/moonlight-common-c/src/SdpGenerator.c \
 	moonlight/third_party/moonlight-common-c/src/SimpleStun.c \
 	moonlight/third_party/moonlight-common-c/src/VideoDepacketizer.c \
-	moonlight/third_party/moonlight-common-c/src/VideoStream.c \
-	moonlight/third_party/nanogui/ext/nanovg/src/nanovg.c
+	moonlight/third_party/moonlight-common-c/src/VideoStream.c
 
-CXX_SOURCES = \
+CXX_SOURCES += \
 	src/libretro.cpp \
 	src/controls/LibretroMouseFrontend.cpp \
 	src/streaming/LibretroMoonlightSessionDecoderAndRenderProvider.cpp \
@@ -141,7 +142,7 @@ CXX_SOURCES = \
 	moonlight/third_party/nanogui/src/slider.cpp \
 	moonlight/third_party/nanogui/src/popupbutton.cpp
 
-LIBS = \
+LIBS += \
 		-Llibs/$(PLATFORM_LIB)/curl/lib \
 		-Llibs/$(PLATFORM_LIB)/expat/lib \
 		-Llibs/$(PLATFORM_LIB)/ffmpeg/lib \
@@ -149,16 +150,13 @@ LIBS = \
 		-Llibs/$(PLATFORM_LIB)/opus/lib \
 		-Llibs/$(PLATFORM_LIB)/jansson/lib
 
-LIBS += -lcrypto -lssl -lcurl -lexpat -lopus -lavcodec -lavutil -ljansson -lstdc++
+LIBS += -lcurl -lssl -lcrypto -lexpat -lopus -ljansson -lstdc++ -lavcodec -lavutil
 
-OBJECTS := $(addprefix build_$(PLATFORM)/, $(C_SOURCES:.c=.o) $(CXX_SOURCES:.cpp=.o))
+OBJECTS += $(addprefix build_$(PLATFORM)/, $(C_SOURCES:.c=.o) $(M_SOURCES:.m=.o) $(CXX_SOURCES:.cpp=.o))
 
 DEFINES += -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
-		-DHAS_SOCKLEN_T \
-		-D__LIBRETRO__ \
+		-DHAS_SOCKLEN_T -D__LIBRETRO__ -DCURL_STATICLIB \
 		-DMOONLIGHT_VERSION=\"$(TARGET_VERSION)\" -DUSE_OPENSSL_CRYPTO
-
-		#-DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE 
 
 CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
 CXXFLAGS += -std=gnu++17 -fno-permissive $(DEFINES)
@@ -168,9 +166,13 @@ TARGET := $(TARGET_NAME)_libretro.$(PLATFORM_EXT)
 all: build_$(PLATFORM)/$(TARGET)
 
 build_$(PLATFORM)/$(TARGET): $(OBJECTS)
-	$(CC) $(SHARED) $(INCLUDES) -o $@ $(OBJECTS) $(LIBS) -lm $(EXTRA_GL_LIBS)
+	$(CC) $(SHARED) -o $@ $(OBJECTS) $(LIBS) -lm $(EXTRA_GL_LIBS)
 
 build_$(PLATFORM)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+
+build_$(PLATFORM)/%.o: %.m
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 

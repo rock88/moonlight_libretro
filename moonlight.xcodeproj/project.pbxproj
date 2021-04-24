@@ -111,9 +111,11 @@
 		2885843F262CC0F900862DB4 /* LibretroMoonlightSessionDecoderAndRenderProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2885843D262CC0F900862DB4 /* LibretroMoonlightSessionDecoderAndRenderProvider.hpp */; };
 		2885844F262CC29800862DB4 /* LibretroMouseFrontend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2885844D262CC29800862DB4 /* LibretroMouseFrontend.cpp */; };
 		28858450262CC29800862DB4 /* LibretroMouseFrontend.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2885844E262CC29800862DB4 /* LibretroMouseFrontend.hpp */; };
+		28EE5D9C26347CD200C9C623 /* helper_macos.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EE5D9426347CC300C9C623 /* helper_macos.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		280E8A292630BF1C00639E49 /* Makefile.common */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; path = Makefile.common; sourceTree = "<group>"; };
 		281885E4262CA10A00C8DB8C /* libmoonlight_libretro.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmoonlight_libretro.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		2885843B262CC0E200862DB4 /* MoonlightSessionDecoderAndRenderProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MoonlightSessionDecoderAndRenderProvider.hpp; sourceTree = "<group>"; };
 		2885843C262CC0F900862DB4 /* LibretroMoonlightSessionDecoderAndRenderProvider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LibretroMoonlightSessionDecoderAndRenderProvider.cpp; sourceTree = "<group>"; };
@@ -363,6 +365,16 @@
 		28896968262C996200139ABE /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
 		28896969262C996200139ABE /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2889696A262C996200139ABE /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
+		28EE5D56263378EA00C9C623 /* libobjc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libobjc.tbd; path = usr/lib/libobjc.tbd; sourceTree = SDKROOT; };
+		28EE5D58263378FA00C9C623 /* libobjc.A.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libobjc.A.tbd; path = usr/lib/libobjc.A.tbd; sourceTree = SDKROOT; };
+		28EE5D9426347CC300C9C623 /* helper_macos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = helper_macos.m; sourceTree = "<group>"; };
+		28EE5D9626347CC300C9C623 /* helper_windows.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = helper_windows.c; sourceTree = "<group>"; };
+		28EE5D9826347CC300C9C623 /* Winsock2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Winsock2.h; sourceTree = "<group>"; };
+		28EE5D9926347CC300C9C623 /* Ws2tcpip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ws2tcpip.h; sourceTree = "<group>"; };
+		28EE5D9A26347CC300C9C623 /* Windows.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Windows.h; sourceTree = "<group>"; };
+		28EE5D9B26347CC300C9C623 /* timeapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timeapi.h; sourceTree = "<group>"; };
+		28EE5D9E26347D0600C9C623 /* Makefile.macos_x86_64 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.macos_x86_64; sourceTree = "<group>"; };
+		28EE5D9F26347D0600C9C623 /* Makefile.windows_x86_64 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.windows_x86_64; sourceTree = "<group>"; };
 		36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		36DBDE9D2450BCF00057C8D3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -885,9 +897,47 @@
 			path = libgamestream;
 			sourceTree = "<group>";
 		};
+		28EE5D9226347CC300C9C623 /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				28EE5D9326347CC300C9C623 /* macos */,
+				28EE5D9526347CC300C9C623 /* windows */,
+			);
+			path = helpers;
+			sourceTree = "<group>";
+		};
+		28EE5D9326347CC300C9C623 /* macos */ = {
+			isa = PBXGroup;
+			children = (
+				28EE5D9426347CC300C9C623 /* helper_macos.m */,
+			);
+			path = macos;
+			sourceTree = "<group>";
+		};
+		28EE5D9526347CC300C9C623 /* windows */ = {
+			isa = PBXGroup;
+			children = (
+				28EE5D9726347CC300C9C623 /* includes */,
+				28EE5D9626347CC300C9C623 /* helper_windows.c */,
+			);
+			path = windows;
+			sourceTree = "<group>";
+		};
+		28EE5D9726347CC300C9C623 /* includes */ = {
+			isa = PBXGroup;
+			children = (
+				28EE5D9826347CC300C9C623 /* Winsock2.h */,
+				28EE5D9926347CC300C9C623 /* Ws2tcpip.h */,
+				28EE5D9A26347CC300C9C623 /* Windows.h */,
+				28EE5D9B26347CC300C9C623 /* timeapi.h */,
+			);
+			path = includes;
+			sourceTree = "<group>";
+		};
 		36B406932459F41E005BD903 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				28EE5D9226347CC300C9C623 /* helpers */,
 				288965F3262C987200139ABE /* glsym */,
 				2885843A262CBFDD00862DB4 /* streaming */,
 				2885844C262CC27A00862DB4 /* controls */,
@@ -900,6 +950,9 @@
 		36DBDE852450BB7E0057C8D3 = {
 			isa = PBXGroup;
 			children = (
+				280E8A292630BF1C00639E49 /* Makefile.common */,
+				28EE5D9E26347D0600C9C623 /* Makefile.macos_x86_64 */,
+				28EE5D9F26347D0600C9C623 /* Makefile.windows_x86_64 */,
 				36B406932459F41E005BD903 /* src */,
 				28896614262C996000139ABE /* moonlight */,
 				36DBDE8F2450BB7E0057C8D3 /* Products */,
@@ -918,6 +971,8 @@
 		36DBDE982450BCD50057C8D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				28EE5D58263378FA00C9C623 /* libobjc.A.tbd */,
+				28EE5D56263378EA00C9C623 /* libobjc.tbd */,
 				2889659C262C88DC00139ABE /* VideoToolbox.framework */,
 				28896598262C88D000139ABE /* CoreVideo.framework */,
 				28896596262C88C700139ABE /* CoreMedia.framework */,
@@ -1006,6 +1061,7 @@
 				288583F6262CA32C00862DB4 /* GamepadController.cpp in Sources */,
 				28188611262CA1EE00C8DB8C /* RtpReorderQueue.c in Sources */,
 				2818860C262CA1EE00C8DB8C /* RtspParser.c in Sources */,
+				28EE5D9C26347CD200C9C623 /* helper_macos.m in Sources */,
 				28188624262CA22100C8DB8C /* nanovg.c in Sources */,
 				28188632262CA2BD00C8DB8C /* messagedialog.cpp in Sources */,
 				2818862F262CA2AD00C8DB8C /* widget.cpp in Sources */,
@@ -1196,22 +1252,22 @@
 					"\"$(SRCROOT)/moonlight/src/nanogui_resources\"",
 					"\"$(SRCROOT)/moonlight/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/moonlight/third_party/moonlight-common-c/src\"",
-					"\"$(SRCROOT)/libs/mac/curl/include\"",
-					"\"$(SRCROOT)/libs/mac/expat/include\"",
-					"\"$(SRCROOT)/libs/mac/ffmpeg/include\"",
-					"\"$(SRCROOT)/libs/mac/jansson/include\"",
-					"\"$(SRCROOT)/libs/mac/openssl/include\"",
-					"\"$(SRCROOT)/libs/mac/opus/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/curl/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/expat/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/ffmpeg/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/jansson/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/openssl/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/opus/include\"",
 					"\"$(SRCROOT)/moonlight/src/ui\"",
 					"\"$(SRCROOT)/moonlight/src\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/libs/mac/curl/lib\"",
-					"\"$(SRCROOT)/libs/mac/expat/lib\"",
-					"\"$(SRCROOT)/libs/mac/ffmpeg/lib\"",
-					"\"$(SRCROOT)/libs/mac/jansson/lib\"",
-					"\"$(SRCROOT)/libs/mac/openssl/lib\"",
-					"\"$(SRCROOT)/libs/mac/opus/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/curl/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/expat/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/ffmpeg/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/jansson/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/openssl/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/opus/lib\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -1240,6 +1296,7 @@
 					"-ljansson",
 					"-lcrypto",
 					"-lssl",
+					"-lobjc",
 				);
 				SDKROOT = macosx;
 			};
@@ -1295,22 +1352,22 @@
 					"\"$(SRCROOT)/moonlight/src/nanogui_resources\"",
 					"\"$(SRCROOT)/moonlight/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/moonlight/third_party/moonlight-common-c/src\"",
-					"\"$(SRCROOT)/libs/mac/curl/include\"",
-					"\"$(SRCROOT)/libs/mac/expat/include\"",
-					"\"$(SRCROOT)/libs/mac/ffmpeg/include\"",
-					"\"$(SRCROOT)/libs/mac/jansson/include\"",
-					"\"$(SRCROOT)/libs/mac/openssl/include\"",
-					"\"$(SRCROOT)/libs/mac/opus/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/curl/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/expat/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/ffmpeg/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/jansson/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/openssl/include\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/opus/include\"",
 					"\"$(SRCROOT)/moonlight/src/ui\"",
 					"\"$(SRCROOT)/moonlight/src\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/libs/mac/curl/lib\"",
-					"\"$(SRCROOT)/libs/mac/expat/lib\"",
-					"\"$(SRCROOT)/libs/mac/ffmpeg/lib\"",
-					"\"$(SRCROOT)/libs/mac/jansson/lib\"",
-					"\"$(SRCROOT)/libs/mac/openssl/lib\"",
-					"\"$(SRCROOT)/libs/mac/opus/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/curl/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/expat/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/ffmpeg/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/jansson/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/openssl/lib\"",
+					"\"$(SRCROOT)/libs/macos/x86_64/opus/lib\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -1338,6 +1395,7 @@
 					"-ljansson",
 					"-lcrypto",
 					"-lssl",
+					"-lobjc",
 				);
 				SDKROOT = macosx;
 			};
