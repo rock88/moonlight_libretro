@@ -112,6 +112,8 @@
 		2885844F262CC29800862DB4 /* LibretroMouseFrontend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2885844D262CC29800862DB4 /* LibretroMouseFrontend.cpp */; };
 		28858450262CC29800862DB4 /* LibretroMouseFrontend.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2885844E262CC29800862DB4 /* LibretroMouseFrontend.hpp */; };
 		28EE5D9C26347CD200C9C623 /* helper_macos.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EE5D9426347CC300C9C623 /* helper_macos.m */; };
+		28EE5DB52635B86600C9C623 /* PlatformCrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = 28EE5DB32635B86600C9C623 /* PlatformCrypto.c */; };
+		28EE5DB62635B86600C9C623 /* PlatformCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 28EE5DB42635B86600C9C623 /* PlatformCrypto.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -375,6 +377,8 @@
 		28EE5D9B26347CC300C9C623 /* timeapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timeapi.h; sourceTree = "<group>"; };
 		28EE5D9E26347D0600C9C623 /* Makefile.macos_x86_64 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.macos_x86_64; sourceTree = "<group>"; };
 		28EE5D9F26347D0600C9C623 /* Makefile.windows_x86_64 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.windows_x86_64; sourceTree = "<group>"; };
+		28EE5DB32635B86600C9C623 /* PlatformCrypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PlatformCrypto.c; sourceTree = "<group>"; };
+		28EE5DB42635B86600C9C623 /* PlatformCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformCrypto.h; sourceTree = "<group>"; };
 		36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		36DBDE9D2450BCF00057C8D3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -660,6 +664,8 @@
 			children = (
 				288968CE262C996200139ABE /* PlatformThreads.h */,
 				288968CF262C996200139ABE /* Input.h */,
+				28EE5DB32635B86600C9C623 /* PlatformCrypto.c */,
+				28EE5DB42635B86600C9C623 /* PlatformCrypto.h */,
 				288968D0262C996200139ABE /* ControlStream.c */,
 				288968D1262C996200139ABE /* RtpReorderQueue.h */,
 				288968D2262C996200139ABE /* Rtsp.h */,
@@ -996,6 +1002,7 @@
 			files = (
 				2885843F262CC0F900862DB4 /* LibretroMoonlightSessionDecoderAndRenderProvider.hpp in Headers */,
 				28858450262CC29800862DB4 /* LibretroMouseFrontend.hpp in Headers */,
+				28EE5DB62635B86600C9C623 /* PlatformCrypto.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1059,6 +1066,7 @@
 				28188646262CA2BD00C8DB8C /* opengl.cpp in Sources */,
 				28188640262CA2BD00C8DB8C /* popup.cpp in Sources */,
 				288583F6262CA32C00862DB4 /* GamepadController.cpp in Sources */,
+				28EE5DB52635B86600C9C623 /* PlatformCrypto.c in Sources */,
 				28188611262CA1EE00C8DB8C /* RtpReorderQueue.c in Sources */,
 				2818860C262CA1EE00C8DB8C /* RtspParser.c in Sources */,
 				28EE5D9C26347CD200C9C623 /* helper_macos.m in Sources */,

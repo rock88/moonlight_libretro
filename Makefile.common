@@ -61,6 +61,7 @@ C_SOURCES += \
 	moonlight/third_party/moonlight-common-c/src/LinkedBlockingQueue.c \
 	moonlight/third_party/moonlight-common-c/src/Misc.c \
 	moonlight/third_party/moonlight-common-c/src/Platform.c \
+	moonlight/third_party/moonlight-common-c/src/PlatformCrypto.c \
 	moonlight/third_party/moonlight-common-c/src/PlatformSockets.c \
 	moonlight/third_party/moonlight-common-c/src/RtpFecQueue.c \
 	moonlight/third_party/moonlight-common-c/src/RtpReorderQueue.c \
